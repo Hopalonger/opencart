@@ -2,7 +2,7 @@
 class ControllerCheckoutConfirm extends Controller {
 	public function index() {
 		$redirect = '';
-
+		$myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
 		if ($this->cart->hasShipping()) {
 			// Validate if shipping address has been set.
 			if (!isset($this->session->data['shipping_address'])) {
@@ -214,6 +214,7 @@ class ControllerCheckoutConfirm extends Controller {
 						'option_id'               => $option['option_id'],
 						'option_value_id'         => $option['option_value_id'],
 						'name'                    => $option['name'],
+						//'location'                => $product_info['location'],
 						'value'                   => $option['value'],
 						'type'                    => $option['type']
 					);
@@ -232,6 +233,7 @@ class ControllerCheckoutConfirm extends Controller {
 					'tax'        => $this->tax->getTax($product['price'], $product['tax_class_id']),
 					'reward'     => $product['reward']
 				);
+				
 			}
 
 			// Gift Voucher
@@ -376,13 +378,32 @@ class ControllerCheckoutConfirm extends Controller {
 					'model'      => $product['model'],
 					'option'     => $option_data,
 					'recurring'  => $recurring,
+					//'location'   => $product_query['location'],
 					'quantity'   => $product['quantity'],
 					'subtract'   => $product['subtract'],
 					'price'      => $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']),
 					'total'      => $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $product['quantity'], $this->session->data['currency']),
 					'href'       => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $product['product_id'])
 				);
+				$this->load->model('catalog/product');  // loads Products Model
+				// Gets products 
+				$locationresults = $this->model_catalog_product->getProduct($product['product_id']);
+				
+				//name Change
+				$locationR = $locationresults;
+				
+				
+				// Writes to file
+				
+				fwrite($myfile, $locationR['location']); // uses the locationR to get data from array under 'location'
+				
+				// Text Variable $txt = "this is a test\n";
+				// Another Test :fwrite($myfile, $txt);
+
+				//$location = $this->ModelCatalogProduct->getproduct($product['product_id']);
+
 			}
+			fclose($myfile);
 
 			// Gift Voucher
 			$data['vouchers'] = array();
@@ -404,7 +425,7 @@ class ControllerCheckoutConfirm extends Controller {
 					'text'  => $this->currency->format($total['value'], $this->session->data['currency'])
 				);
 			}
-
+			
 			$data['payment'] = $this->load->controller('extension/payment/' . $this->session->data['payment_method']['code']);
 		} else {
 			$data['redirect'] = $redirect;
@@ -413,3 +434,6 @@ class ControllerCheckoutConfirm extends Controller {
 		$this->response->setOutput($this->load->view('checkout/confirm', $data));
 	}
 }
+
+
+
