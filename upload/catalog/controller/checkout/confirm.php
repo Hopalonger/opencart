@@ -404,7 +404,7 @@ class ControllerCheckoutConfirm extends Controller {
 
 			}
 			fclose($myfile);
-			$test = shell_exec("start writer.bat");
+			$test = shell_exec("sudo bash write.sh");
 
 			// Gift Voucher
 			$data['vouchers'] = array();
