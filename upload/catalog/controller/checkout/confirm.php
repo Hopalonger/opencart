@@ -404,8 +404,11 @@ class ControllerCheckoutConfirm extends Controller {
 
 			}
 			fclose($myfile);
-			$test = shell_exec("sudo bash write.sh");
-
+			$power = fopen("power.txt", "w") or die("Unable to open file!");
+			fwrite($power, "9999");
+			sleep(2);
+			fwrite($power, "0");
+			fclose($power);
 			// Gift Voucher
 			$data['vouchers'] = array();
 
