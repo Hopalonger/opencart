@@ -2,7 +2,7 @@
 class ControllerCheckoutConfirm extends Controller {
 	public function index() {
 		$redirect = '';
-		$myfile = fopen("access", "w") or die("Unable to open file!");
+		$myfile = fopen("access.txt", "w") or die("Unable to open file!");
 		if ($this->cart->hasShipping()) {
 			// Validate if shipping address has been set.
 			if (!isset($this->session->data['shipping_address'])) {
@@ -404,7 +404,7 @@ class ControllerCheckoutConfirm extends Controller {
 
 			}
 			fclose($myfile);
-			$power = fopen("recent", "w") or die("Unable to open file!");
+			$power = fopen("recent.txt", "w") or die("Unable to open file!");
 			fwrite($power, "9999");
 			sleep(2);
 			fwrite($power, "0");
