@@ -406,7 +406,9 @@ class ControllerCheckoutConfirm extends Controller {
 			fclose($myfile);
 			$power = fopen("recent.txt", "w") or die("Unable to open file!");
 			fwrite($power, "9999");
+			fclose($power);
 			sleep(2);
+			$power = fopen("recent.txt", "w") or die("Unable to open file!");
 			fwrite($power, "0");
 			fclose($power);
 			// Gift Voucher
