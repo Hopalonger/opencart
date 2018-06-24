@@ -60,5 +60,27 @@ class ControllerCheckoutSuccess extends Controller {
 		$data['header'] = $this->load->controller('common/header');
 
 		$this->response->setOutput($this->load->view('common/success', $data));
+		$myfile = fopen("ID.txt", "r") or die("Unable to open file!");
+                $id = fread($myfile,filesize("ID.txt"));
+                fclose($myfile);
+                $location = 'Data';
+                $this->load->model('catalog/product');
+                $locationresults = $this->model_catalog_product->getProduct($id);
+                $Loc = fopen("access.txt", "w") or die("Unable to open file!");
+                fwrite($Loc, $locationresults['location']);
+                fclose($Loc);
+                $power = fopen("recent.txt", "w") or die("Unable to open file!");
+                fwrite($power, "9999");
+                fclose($power);
+                sleep(2);
+                $power = fopen("recent.txt", "w") or die("Unable to open file!");
+                fwrite($power, "0");
+                fclose($power);
+                $I = fopen("ID.txt", "w") or die("Unable to open file!");
+                fwrite($I, "0");
+                fclose($I);
+
+
+
 	}
 }
