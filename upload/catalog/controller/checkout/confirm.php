@@ -385,32 +385,7 @@ class ControllerCheckoutConfirm extends Controller {
 					'total'      => $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $product['quantity'], $this->session->data['currency']),
 					'href'       => $this->url->link('product/product', 'language=' . $this->config->get('config_language') . '&product_id=' . $product['product_id'])
 				);
-				$this->load->model('catalog/product');  // loads Products Model
-				// Gets products 
-				$locationresults = $this->model_catalog_product->getProduct($product['product_id']);
-				
-				//name Change
-				$locationR = $locationresults;
-				
-				
-				// Writes to file
-				
-				fwrite($myfile, $locationR['location']); // uses the locationR to get data from array under 'location'
-				
-				// Text Variable $txt = "this is a test\n";
-				// Another Test :fwrite($myfile, $txt);
 
-				//$location = $this->ModelCatalogProduct->getproduct($product['product_id']);
-
-			}
-			fclose($myfile);
-			$power = fopen("recent.txt", "w") or die("Unable to open file!");
-			fwrite($power, "9999");
-			fclose($power);
-			sleep(2);
-			$power = fopen("recent.txt", "w") or die("Unable to open file!");
-			fwrite($power, "0");
-			fclose($power);
 			// Gift Voucher
 			$data['vouchers'] = array();
 
